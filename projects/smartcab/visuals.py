@@ -85,7 +85,7 @@ def plot_trials(csv):
 	data['major_acc'] = (data['actions'].apply(lambda x: ast.literal_eval(x)[4]) * 1.0 / \
 		(data['initial_deadline'] - data['final_deadline'])).rolling(window=10, center=False).mean()
 	data['epsilon'] = data['parameters'].apply(lambda x: ast.literal_eval(x)['e'])
-	data['alpha'] = data['parameters'].apply(lambda x: ast.literal_eval(x)['a'])
+	data['alpha'] = data['parameters'].apply(lambda x: ast.literal_eval(x)['a']) 
 
 
 	# Create training and testing subsets
