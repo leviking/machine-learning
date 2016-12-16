@@ -40,12 +40,13 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        self.trial_number = self.trial_number + 1
-        if testing:
-            self.epsilon = 0
-            self.alpha = 0
-        else:
-            self.epsilon = math.exp(-1.0 * self.alpha * self.trial_number)
+        # self.trial_number = self.trial_number + 1
+        # if testing:
+        #     self.epsilon = 0
+        #     self.alpha = 0
+        # else:
+        #     self.epsilon = math.exp(-1.0 * self.alpha * self.trial_number)
+        self.epsilon = self.epsilon - 0.05
 
         return None
 
@@ -207,7 +208,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.0001, log_metrics=True, optimized=True)
+    sim = Simulator(env, update_delay=0.0001, log_metrics=True)
 
     ##############
     # Run the simulator
