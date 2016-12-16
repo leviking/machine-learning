@@ -47,6 +47,7 @@ class LearningAgent(Agent):
         # else:
         #     self.epsilon = math.exp(-1.0 * self.alpha * self.trial_number)
         self.epsilon = self.epsilon - 0.05
+        print "epsilon: " + str(self.epsilon)
 
         return None
 
@@ -85,7 +86,7 @@ class LearningAgent(Agent):
         # Calculate the maximum Q-value of all actions for a given state
 
         maxQ = None
-        # print 'the state is: ' + str(self.Q[state])
+        print 'the state is: ' + str(self.Q[state])
         # if state[0][1] == 'red':
         #     maxQ = None
         #     return maxQ
@@ -94,11 +95,11 @@ class LearningAgent(Agent):
                 maxQ = key
             elif self.Q[state][key] == self.Q[state][maxQ]:
                 maxQ = random.choice([key,maxQ])
-        if random.random() < self.epsilon:
-            for key in self.Q[state]:
-                # if key != 'left' and self.Q[state][key] == 0:
-                if self.Q[state][key] == 0:
-                    maxQ = key
+        # if random.random() < self.epsilon:
+        #     for key in self.Q[state]:
+        #         # if key != 'left' and self.Q[state][key] == 0:
+        #         if self.Q[state][key] == 0:
+        #             maxQ = key
         # print 'maxQ key: ' + str(maxQ)
         return maxQ
 
@@ -133,16 +134,20 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        if not self.learning:
+        # maxQ = self.get_maxQ(state)
+        #
+        # for key in self.Q[state]:
+        #     if self.Q[state][key] == 0 and random.random() < self.epsilon:
+        #         return key
+        if self.learning:
+            for key in self.Q[state]:
+                if self.Q[state][key] == 0 and random.random() < self.epsilon:
+                    return key
+            return self.get_maxQ(state)
+        else:
             return random.choice(action)
-        # else:
-        #     if random.random() < self.epsilon:
-        #         # print "agent chose randomly " + str(self.epsilon)
-        #         return random.choice(action)
-        #     else:
-        #         # print "agent chose maxQ"
-        #         return self.get_maxQ(state)
-        return self.get_maxQ(state)
+
+        # return self.get_maxQ(state)
 
 
 
@@ -194,7 +199,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=False, alpha = 0.4)
+    agent = env.create_agent(LearningAgent, learning=True, alpha = 0.4)
 
     ##############
     # Follow the driving agent
