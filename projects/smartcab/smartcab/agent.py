@@ -86,9 +86,9 @@ class LearningAgent(Agent):
 
         maxQ = None
         # print 'the state is: ' + str(self.Q[state])
-        if state[0][1] == 'red':
-            maxQ = None
-            return maxQ
+        # if state[0][1] == 'red':
+        #     maxQ = None
+        #     return maxQ
         for key in self.Q[state]:
             if self.Q[state][key] > self.Q[state][maxQ]:
                 maxQ = key
@@ -157,7 +157,8 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
         if self.learning:
-            self.Q[state][action] = reward
+            # self.Q[state][action] = reward
+            self.Q[state][action] = self.Q[state][action] + self.alpha * (reward - self.Q[state][action])
         return
 
 
