@@ -40,13 +40,15 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        # self.trial_number = self.trial_number + 1
-        # if testing:
-        #     self.epsilon = 0
-        #     self.alpha = 0
-        # else:
-        #     self.epsilon = math.exp(-1.0 * self.alpha * self.trial_number)
-        self.epsilon = self.epsilon - 0.05
+        self.trial_number = self.trial_number + 1
+        if testing:
+            self.epsilon = 0
+            self.alpha = 0
+        else:
+            # self.epsilon = math.exp(-1.0 * self.alpha * self.trial_number)
+            # self.epsilon = self.epsilon - 0.05
+            # self.epsilon = 1 / (self.trial_number ** 2)
+            self.epsilon = self.alpha ** self.trial_number
         print "epsilon: " + str(self.epsilon)
 
         return None
@@ -86,10 +88,7 @@ class LearningAgent(Agent):
         # Calculate the maximum Q-value of all actions for a given state
 
         maxQ = None
-        print 'the state is: ' + str(self.Q[state])
-        # if state[0][1] == 'red':
-        #     maxQ = None
-        #     return maxQ
+        # print 'the state is: ' + str(self.Q[state])
         for key in self.Q[state]:
             if self.Q[state][key] > self.Q[state][maxQ]:
                 maxQ = key
@@ -141,7 +140,9 @@ class LearningAgent(Agent):
         #         return key
         if self.learning:
             for key in self.Q[state]:
-                if self.Q[state][key] == 0 and random.random() < self.epsilon:
+                if state[0][1] == 'red':
+                    return None
+                if key != 'left' and self.Q[state][key] == 0 and random.random() < self.epsilon:
                     return key
             return self.get_maxQ(state)
         else:
@@ -199,7 +200,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, alpha = 0.4)
+    agent = env.create_agent(LearningAgent, learning=True, alpha = 0.95)
 
     ##############
     # Follow the driving agent
@@ -214,7 +215,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.0001, log_metrics=True)
+    sim = Simulator(env, update_delay=0.0001, log_metrics=True, optimized=True)
 
     ##############
     # Run the simulator
