@@ -100,7 +100,7 @@ class LearningAgent(Agent):
         #         if self.Q[state][key] == 0:
         #             maxQ = key
         # print 'maxQ key: ' + str(maxQ)
-        return maxQ
+        return self.Q[state][maxQ]
 
 
     def createQ(self, state):
@@ -140,7 +140,9 @@ class LearningAgent(Agent):
         #         return key
 
         if self.learning and random.random() > self.epsilon:
-            return self.get_maxQ(state)
+            maxQ = self.get_maxQ(state)
+            action = random.choice ([action for action in self.valid_actions if self.Q[state][action] == maxQ])
+            return action
         else:
             return random.choice(action)
 
@@ -196,7 +198,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, alpha = 0.95)
+    agent = env.create_agent(LearningAgent, learning=True, alpha = 0.5)
 
     ##############
     # Follow the driving agent
@@ -211,14 +213,14 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.0001, log_metrics=True, optimized=True)
+    sim = Simulator(env, update_delay=0.0001, log_metrics=True, optimized=False)
 
     ##############
     # Run the simulator
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(tolerance = 0.01, n_test=100)
+    sim.run(tolerance = 0.05, n_test=20)
 
 
 if __name__ == '__main__':
