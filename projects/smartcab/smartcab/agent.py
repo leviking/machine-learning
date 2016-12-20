@@ -45,10 +45,10 @@ class LearningAgent(Agent):
             self.epsilon = 0
             self.alpha = 0
         else:
-            # self.epsilon = math.exp(-1.0 * self.alpha * self.trial_number)
+            self.epsilon = math.e**(-0.08 * (self.alpha) * self.trial_number) + 0.0099999999
             # self.epsilon = self.epsilon - 0.05
             # self.epsilon = 1 / (self.trial_number ** 2)
-            self.epsilon = self.alpha ** self.trial_number
+            # self.epsilon = self.alpha ** (0.8 * self.trial_number)
         print "epsilon: " + str(self.epsilon)
 
         return None
@@ -138,12 +138,8 @@ class LearningAgent(Agent):
         # for key in self.Q[state]:
         #     if self.Q[state][key] == 0 and random.random() < self.epsilon:
         #         return key
-        if self.learning:
-            for key in self.Q[state]:
-                if state[0][1] == 'red':
-                    return None
-                if key != 'left' and self.Q[state][key] == 0 and random.random() < self.epsilon:
-                    return key
+
+        if self.learning and random.random() > self.epsilon:
             return self.get_maxQ(state)
         else:
             return random.choice(action)
@@ -222,7 +218,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(tolerance = 0.05, n_test=20)
+    sim.run(tolerance = 0.01, n_test=100)
 
 
 if __name__ == '__main__':
