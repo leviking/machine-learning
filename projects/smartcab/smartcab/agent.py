@@ -45,8 +45,8 @@ class LearningAgent(Agent):
             self.epsilon = 0
             self.alpha = 0
         else:
-            self.epsilon = math.e**(-0.08 * (self.alpha) * self.trial_number) + 0.0099999999
-            # self.epsilon = self.epsilon - 0.05
+            # self.epsilon = math.e**(-0.08 * (self.alpha) * self.trial_number) + 0.0099999999
+            self.epsilon = self.epsilon - 0.05
             # self.epsilon = 1 / (self.trial_number ** 2)
             # self.epsilon = self.alpha ** (0.8 * self.trial_number)
         print "epsilon: " + str(self.epsilon)
